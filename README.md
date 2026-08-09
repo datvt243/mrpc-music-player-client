@@ -38,4 +38,4 @@ Xem hướng dẫn chi tiết từng bước tại **[INSTALL.md](./INSTALL.md)*
 
 ## License
 
-Config cá nhân, tự do tham khảo/sao chép.
+[MIT](./LICENSE)
