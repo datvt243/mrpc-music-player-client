@@ -3,6 +3,7 @@ database
 log
 pid
 state
+sticker.sql
 playlists/
 mpd.conf.bak*
 

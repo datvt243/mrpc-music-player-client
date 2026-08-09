@@ -10,15 +10,19 @@ Cấu hình cá nhân cho [MPD](https://www.musicpd.org/) (Music Player Daemon) 
 ```
 .
 ├── README.md
-├── INSTALL.md          # hướng dẫn cài đặt từng bước
-├── mpd.conf             # config của mpd (đặt tại ~/.config/mpd/mpd.conf)
+├── INSTALL.md              # hướng dẫn cài đặt từng bước
+├── mpd.conf                 # config của mpd (đặt tại ~/.config/mpd/mpd.conf)
 └── rmpc/
-    └── config.ron       # config của rmpc (đặt tại ~/.config/rmpc/config.ron)
+    ├── config.ron           # config của rmpc (đặt tại ~/.config/rmpc/config.ron)
+    └── themes/
+        └── nord.ron          # theme Nord (đặt tại ~/.config/rmpc/themes/nord.ron)
 ```
 
 Các file runtime của mpd (`database`, `log`, `state`, `pid`, `playlists/`) **không** được commit — chúng được tự sinh lại khi mpd chạy lần đầu.
 
 > **Lưu ý về định dạng config của rmpc:** rmpc dùng định dạng **RON** (`config.ron`), không phải TOML/YAML. Nếu tự viết config tay, kiểm tra lại bằng `rmpc debuginfo` — dòng `Config path` phải trỏ đúng file, nếu là `None` nghĩa là rmpc không đọc được config và đang chạy 100% giá trị mặc định. File `rmpc/config.ron` trong repo này được sinh trực tiếp từ `rmpc config` (in ra toàn bộ default config) nên chắc chắn đúng schema.
+
+Theme đang dùng: **Nord** (`rmpc/themes/nord.ron`, tham chiếu qua `theme: "nord"` trong `config.ron`). Yêu cầu terminal cài **Nerd Font** để hiện đúng icon — xem [INSTALL.md](./INSTALL.md#theme-nord) để biết cách cài và các lỗi thường gặp khi tự lấy theme từ docs (bản "latest/next" trên trang docs rmpc có thể không khớp schema với bản `rmpc` đang cài).
 
 ## Thành phần
 

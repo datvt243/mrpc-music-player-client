@@ -33,8 +33,9 @@ git clone <URL-repo-cua-ban> ~/.config/mpd
 ## Bước 3 — Đặt config của rmpc
 
 ```bash
-mkdir -p ~/.config/rmpc
+mkdir -p ~/.config/rmpc/themes
 cp ~/.config/mpd/rmpc/config.ron ~/.config/rmpc/config.ron
+cp ~/.config/mpd/rmpc/themes/nord.ron ~/.config/rmpc/themes/nord.ron
 ```
 
 ## Bước 4 — Sửa `mpd.conf` cho đúng máy của bạn
@@ -63,6 +64,7 @@ db_file "/Users/ban/.config/mpd/database"
 log_file "/Users/ban/.config/mpd/log"
 pid_file "/Users/ban/.config/mpd/pid"
 state_file "/Users/ban/.config/mpd/state"
+sticker_file "/Users/ban/.config/mpd/sticker.sql"
 restore_paused "yes"
 playlist_directory "/Users/ban/.config/mpd/playlists"
 bind_to_address "127.0.0.1"
@@ -73,6 +75,8 @@ audio_output {
     mixer_type "software"
 }
 ```
+
+> `sticker_file` bật MPD sticker database — cần cho theme Nord (rating/playcount/history trong `rmpc`). Có thể bỏ dòng này nếu không dùng theme Nord.
 
 ## Bước 5 — Tạo symlink để mpd tìm được config kể cả khi chạy nền qua launchd
 
@@ -129,6 +133,33 @@ rmpc
 ```
 
 rmpc sẽ tự kết nối tới `127.0.0.1:6600` (theo `~/.config/rmpc/config.ron`) và hiển thị thư viện vừa quét.
+
+## Theme Nord
+
+Repo này dùng theme [Nord](https://www.nordtheme.com/) cho rmpc — tông xanh Bắc Cực, đã setup sẵn ở `rmpc/themes/nord.ron` và bật trong `config.ron` (`theme: "nord"`, phần `tabs` cũng đổi theo layout của Nord). Nếu clone repo và làm theo Bước 1-3 ở trên thì theme đã sẵn sàng, không cần làm gì thêm.
+
+**Yêu cầu:** cài một [Nerd Font](https://www.nerdfonts.com/) (ví dụ `JetBrainsMono Nerd Font`, `FiraCode Nerd Font`) và set làm font cho terminal đang dùng (iTerm2/Terminal.app/WezTerm/Alacritty...) — theme Nord dùng icon riêng cho trạng thái phát, rating, thư mục... Không có Nerd Font thì các icon này hiện thành ô vuông hoặc dấu `?`.
+
+```bash
+brew install --cask font-jetbrains-mono-nerd-font
+```
+
+### Nếu muốn tự lấy theme khác từ trang docs rmpc (Catppuccin, hoặc tự chỉnh Nord)
+
+Trang https://rmpc.mierak.dev có bản theme cho từng phiên bản — **phải chọn đúng URL khớp version đang cài**, không dùng link "Latest" mặc định (đó là bản `next`/development, schema có thể khác bản đã release và sẽ báo lỗi `Deserialization error` khi chạy `rmpc debuginfo`). Kiểm tra version đang cài:
+
+```bash
+rmpc debuginfo 2>&1 | head -1   # ví dụ: rmpc 0.11.0 ...
+```
+
+Rồi vào đúng `https://rmpc.mierak.dev/<version>/themes/<ten-theme>/` (ví dụ `https://rmpc.mierak.dev/0.11.0/themes/nord/`), không phải `https://rmpc.mierak.dev/themes/<ten-theme>/`.
+
+Sau khi sửa `config.ron`/theme, luôn chạy lại `rmpc debuginfo` — dòng `Theme path` phải resolve đúng file, không có `Error: Failed to read config` phía trên.
+
+**Các lỗi cụ thể đã gặp khi lấy nhầm bản docs (dev/next) thay vì bản khớp version:**
+
+- `Deserialization error, tabs[...].pane...Browser: Unexpected missing field named 'root_tag'` — do copy theme/tabs từ trang "Latest" (bản dev), trong khi `rmpc` đã cài dùng schema `Browser` khác (đơn giản hơn, không cần `root_tag`). Fix: lấy lại đúng URL version-pinned như trên.
+- `Missing border set: <tên>` — do dùng `border_symbols: Library("<tên>")` nhưng registry `border_symbol_sets` không được rmpc resolve đúng chỗ (cross giữa `config.ron` và `theme.ron`). Cách đơn giản nhất: thay `Library("<tên>")` bằng `Rounded` (hoặc kiểu border có sẵn khác) thay vì cố định nghĩa `border_symbol_sets` — mất hiệu ứng viền góc-cụt nhỏ nhưng không ảnh hưởng theme tổng thể.
 
 ---
 

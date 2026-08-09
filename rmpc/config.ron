@@ -4,7 +4,7 @@
 (
     address: "127.0.0.1:6600",
     password: None,
-    theme: None,
+    theme: "nord",
     cache_dir: None,
     on_song_change: None,
     volume_step: 5,
@@ -143,139 +143,83 @@
         album_date_tags: [Date],
     ),
     tabs: [
-        (
-            name: "Queue",
-            pane: Split(
-                direction: Horizontal,
-                panes: [
-                    (
-                        size: "35%",
-                        pane: Split(
-                            direction: Vertical,
-                            panes: [
-                                (
-                                    size: "100%",
-                                    borders: "LEFT | RIGHT | TOP",
-                                    border_symbols: Rounded,
-                                    pane: Pane(AlbumArt)
-                                ),
-                                (
-                                    size: "7",
-                                    borders: "ALL",
-                                    border_symbols: Inherited(parent: Rounded, top_left: "├", top_right: "┤",),
-                                    border_title: [(kind: Text(" Lyrics "))],
-                                    border_title_alignment: Right,
-                                    pane: Pane(Lyrics)
-                                ),
-                            ],
-                        ),
-                    ), 
-                    (
-                        size: "65%",
-                        pane: Split(
-                            direction: Vertical,
-                            panes: [
-                                (
-                                    size: "3",
-                                    borders: "ALL",
-                                    border_symbols: Inherited(parent: Rounded, bottom_left: "├", bottom_right: "┤",),
-                                    pane: Split(
-                                        direction: Horizontal,
-                                        panes: [
-                                            (
-                                                size: "1",
-                                                pane: Pane(Empty())
-                                            ),
-                                            (
-                                                size: "100%",
-                                                pane: Pane(QueueHeader())
-                                            ),
-                                        ]
-                                    )
-                                ),
-                                (
-                                    size: "100%",
-                                    borders: "LEFT | RIGHT | BOTTOM",
-                                    border_symbols: Rounded,
-                                    pane: Split(
-                                        direction: Horizontal,
-                                        panes: [
-                                            (
-                                                size: "1",
-                                                pane: Pane(Empty())
-                                            ),
-                                            (
-                                                size: "100%",
-                                                pane: Pane(Queue)
-                                            ),
-                                        ]
-                                    )
-                                ),
-                            ],
-                        )
+        (name: "Home", pane: Split(direction: Horizontal, panes: [
+                    (size: "70%", borders: "NONE", pane: Split(direction: Vertical, panes: [
+                                (size: "3", borders: "ALL", border_symbols: Rounded , pane: Pane(QueueHeader())),
+                                (size: "100%", borders: "ALL", border_symbols: Rounded ,pane: Pane(Queue)),
+                        ])
+
+
                     ),
-                ],
-            ),
+                    (size: "30%", borders: "NONE", border_symbols: Rounded ,pane: Split(direction: Vertical, panes: [
+                                (size: "0.47r", borders: "TOP | RIGHT | LEFT",
+                                    border_symbols: Rounded,
+                                    pane: Pane(AlbumArt)),
+                                (size: "100%", borders: "ALL",
+                                    border_symbols: Rounded,
+                                    border_title: [(kind: Text("Lyrics"), style: (fg: "#81a1c1"))],
+                                    border_title_position: Top,
+                                    border_title_alignment: Right,
+                                    pane: Pane(Lyrics)),
+                            ])
+                    ),
+
+
+                ])
         ),
-        (
-            name: "Directories",
-            borders: "ALL",
-            border_symbols: Rounded,
-            pane: Split(
-                size: "100%",
-                direction: Vertical,
-                panes: [(pane: Pane(Directories), size: "100%", borders: "ALL", border_symbols: Rounded)],
-            )
+        (name: "Directories", pane: Split(direction: Horizontal,panes: [
+                    (size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Directories)),
+                ])
         ),
-        (
-            name: "Artists",
-            borders: "ALL",
-            border_symbols: Rounded,
-            pane: Split(
-                size: "100%",
-                direction: Vertical,
-                panes: [(pane: Pane(Artists), size: "100%", borders: "ALL", border_symbols: Rounded)],
-            )
+        (name: "Playlists", pane: Split(direction: Horizontal, panes: [
+                    (size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Playlists)),
+                ])
         ),
-        (
-            name: "Album Artists",
-            borders: "ALL",
-            border_symbols: Rounded,
-            pane: Split(
-                size: "100%",
-                direction: Vertical,
-                panes: [(pane: Pane(AlbumArtists), size: "100%", borders: "ALL", border_symbols: Rounded)],
-            )
+        (name: "Artists", pane: Split(direction: Horizontal, panes: [
+                    (size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Artists)),
+                ])
         ),
-        (
-            name: "Albums",
-            borders: "ALL",
-            border_symbols: Rounded,
-            pane: Split(
-                size: "100%",
-                direction: Vertical,
-                panes: [(pane: Pane(Albums), size: "100%", borders: "ALL", border_symbols: Rounded)],
-            )
+        (name: "Albums", pane: Split(direction: Horizontal, panes: [
+                    (size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Albums)),
+                ])
         ),
-        (
-            name: "Playlists",
-            borders: "ALL",
-            border_symbols: Rounded,
-            pane: Split(
-                size: "100%",
-                direction: Vertical,
-                panes: [(pane: Pane(Playlists), size: "100%", borders: "ALL", border_symbols: Rounded)],
-            )
+        (name: "Album Artists", pane: Split(direction: Horizontal, panes: [
+                    (size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(AlbumArtists)),
+                ])
         ),
-        (
-            name: "Search",
-            borders: "ALL",
-            border_symbols: Rounded,
-            pane: Split(
-                size: "100%",
-                direction: Vertical,
-                panes: [(pane: Pane(Search), size: "100%", borders: "ALL", border_symbols: Rounded)],
-            )
+        (name: "Genre", pane: Split(direction: Horizontal, panes: [
+                    (size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Browser(root_tag: "genre", separator: ";"))),
+                ])
+        ),
+        (name: "Queue", pane: Split(direction: Vertical, panes: [
+                    (size: "2", borders: "TOP | RIGHT | LEFT", border_symbols: Rounded , pane: Pane(QueueHeader())),
+                    (size: "100%", borders: "ALL", border_symbols: Rounded,
+                                    border_title: [(kind: Property(Song(File)), style: (fg: "#4c566a"))],
+                                    border_title_position: Bottom,
+                                    border_title_alignment: Right,
+                                    pane: Pane(Queue)),
+                        ])
+
+
+        ),
+        (name: "Show",pane: Split(direction: Vertical, panes: [
+                    (size: "50%", pane: Split(direction: Horizontal, panes: [
+                                (size: "39%", borders: "ALL", border_symbols: Rounded, pane: Pane(Queue)),
+                                (size: "22%", borders: "ALL", border_symbols: Rounded, pane: Pane(AlbumArt)),
+                                (size: "39%", borders: "ALL",
+                                     border_title: [(kind: Text("Lyrics"), style: (fg: "#81a1c1"))],
+                                     border_title_position: Top,
+                                     border_title_alignment: Right,
+                                     border_symbols: Rounded,
+                                    pane: Pane(Lyrics)),
+                            ])
+                    ),
+                    (size: "50%", borders: "ALL", border_symbols: Rounded, pane: Pane(Cava)),
+                ])
+        ),
+        (name: "Search", pane: Split(direction: Horizontal, panes: [
+                    (size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Search)),
+                ])
         ),
     ],
 )
