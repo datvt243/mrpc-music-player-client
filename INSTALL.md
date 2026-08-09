@@ -34,7 +34,7 @@ git clone <URL-repo-cua-ban> ~/.config/mpd
 
 ```bash
 mkdir -p ~/.config/rmpc
-cp ~/.config/mpd/rmpc/config.toml ~/.config/rmpc/config.toml
+cp ~/.config/mpd/rmpc/config.ron ~/.config/rmpc/config.ron
 ```
 
 ## Bước 4 — Sửa `mpd.conf` cho đúng máy của bạn
@@ -128,7 +128,7 @@ mpc clear
 rmpc
 ```
 
-rmpc sẽ tự kết nối tới `127.0.0.1:6600` (theo `~/.config/rmpc/config.toml`) và hiển thị thư viện vừa quét.
+rmpc sẽ tự kết nối tới `127.0.0.1:6600` (theo `~/.config/rmpc/config.ron`) và hiển thị thư viện vừa quét.
 
 ---
 
@@ -238,7 +238,7 @@ Nếu không nghe được gì, xem thêm hướng dẫn chính thức: [WSL aud
 ### Bước 5 — Chạy mpd, cài rmpc, test
 
 ```bash
-mkdir -p ~/.config/rmpc && cp ~/.config/mpd/rmpc/config.toml ~/.config/rmpc/config.toml
+mkdir -p ~/.config/rmpc && cp ~/.config/mpd/rmpc/config.ron ~/.config/rmpc/config.ron
 mpd ~/.config/mpd/mpd.conf
 mpc update && mpc stats
 mpc add / && mpc play && sleep 2 && mpc status   # test có tiến trình phát không có lỗi
@@ -317,10 +317,10 @@ rmpc chưa có bản build sẵn cho Windows, cần build từ source bằng Rus
 cargo install rmpc
 ```
 
-Copy config rmpc trong repo (`rmpc/config.toml`) ra một chỗ trên máy Windows, ví dụ `C:\Users\ban\.rmpc\config.toml`, rồi chạy chỉ định thẳng bằng flag `--config` (an toàn hơn là đoán default path trên Windows):
+Copy config rmpc trong repo (`rmpc/config.ron`) ra một chỗ trên máy Windows, ví dụ `C:\Users\ban\.rmpc\config.ron`, rồi chạy chỉ định thẳng bằng flag `--config` (an toàn hơn là đoán default path trên Windows):
 
 ```powershell
-rmpc --config "C:\Users\ban\.rmpc\config.toml"
+rmpc --config "C:\Users\ban\.rmpc\config.ron"
 ```
 
 ### Bước 6 — Test bằng `mpc` (tuỳ chọn)

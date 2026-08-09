@@ -13,10 +13,12 @@ Cấu hình cá nhân cho [MPD](https://www.musicpd.org/) (Music Player Daemon) 
 ├── INSTALL.md          # hướng dẫn cài đặt từng bước
 ├── mpd.conf             # config của mpd (đặt tại ~/.config/mpd/mpd.conf)
 └── rmpc/
-    └── config.toml       # config của rmpc (đặt tại ~/.config/rmpc/config.toml)
+    └── config.ron       # config của rmpc (đặt tại ~/.config/rmpc/config.ron)
 ```
 
 Các file runtime của mpd (`database`, `log`, `state`, `pid`, `playlists/`) **không** được commit — chúng được tự sinh lại khi mpd chạy lần đầu.
+
+> **Lưu ý về định dạng config của rmpc:** rmpc dùng định dạng **RON** (`config.ron`), không phải TOML/YAML. Nếu tự viết config tay, kiểm tra lại bằng `rmpc debuginfo` — dòng `Config path` phải trỏ đúng file, nếu là `None` nghĩa là rmpc không đọc được config và đang chạy 100% giá trị mặc định. File `rmpc/config.ron` trong repo này được sinh trực tiếp từ `rmpc config` (in ra toàn bộ default config) nên chắc chắn đúng schema.
 
 ## Thành phần
 
