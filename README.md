@@ -1,6 +1,9 @@
-# mpd + rmpc setup (macOS)
+# mpd + rmpc setup
 
-Cấu hình cá nhân cho [MPD](https://www.musicpd.org/) (Music Player Daemon) và [rmpc](https://github.com/mierak/rmpc) (terminal client, có album art) chạy trên macOS qua Homebrew.
+Cấu hình cá nhân cho [MPD](https://www.musicpd.org/) (Music Player Daemon) và [rmpc](https://github.com/mierak/rmpc) (terminal client, có album art).
+
+- **macOS** — cài qua Homebrew, đã setup và test trực tiếp.
+- **Windows** — hướng dẫn qua WSL2 hoặc native Windows (best-effort, rmpc [chỉ chính thức hỗ trợ Linux](https://rmpc.mierak.dev)).
 
 ## Cấu trúc repo
 
@@ -23,7 +26,7 @@ Các file runtime của mpd (`database`, `log`, `state`, `pid`, `playlists/`) **
 
 ## Điểm cần lưu ý trên macOS
 
-Setup này có vài chỗ "gài" đặc thù macOS đã được xử lý sẵn trong `mpd.conf`, xem chi tiết + lý do trong [INSTALL.md](./INSTALL.md#troubleshooting--các-lỗi-đã-gặp):
+Setup này có vài chỗ "gài" đặc thù macOS đã được xử lý sẵn trong `mpd.conf`, xem chi tiết + lý do trong [INSTALL.md](./INSTALL.md#macos):
 
 1. `audio_output` phải dùng `type "osx"` (CoreAudio) — không phải `pulse` (PulseAudio không có sẵn trên macOS).
 2. Tất cả đường dẫn trong `mpd.conf` dùng **đường dẫn tuyệt đối** (`/Users/xxx/...`) thay vì `~`, vì mpd chạy qua `launchd` (brew services) không có biến môi trường `HOME`.
@@ -31,7 +34,7 @@ Setup này có vài chỗ "gài" đặc thù macOS đã được xử lý sẵn 
 
 ## Cài đặt
 
-Xem hướng dẫn chi tiết từng bước tại **[INSTALL.md](./INSTALL.md)**.
+Xem hướng dẫn chi tiết từng bước tại **[INSTALL.md](./INSTALL.md)** — có cả macOS và Windows.
 
 ## License
 

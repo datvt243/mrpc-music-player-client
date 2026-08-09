@@ -1,4 +1,10 @@
-# Hướng dẫn cài đặt (macOS)
+# Hướng dẫn cài đặt
+
+Chọn hệ điều hành: [macOS](#macos) · [Windows](#windows)
+
+---
+
+# macOS
 
 ## Yêu cầu
 
@@ -126,7 +132,7 @@ rmpc sẽ tự kết nối tới `127.0.0.1:6600` (theo `~/.config/rmpc/config.t
 
 ---
 
-## Troubleshooting — các lỗi đã gặp
+## Troubleshooting (macOS) — các lỗi đã gặp
 
 ### 1. Không có tiếng, log báo `Failed to open "CoreAudio" (osx)` hoặc dùng nhầm `type "pulse"`
 
@@ -172,3 +178,165 @@ mpc clear
 ```
 
 rồi phát lại bình thường.
+
+---
+
+# Windows
+
+> ⚠️ **Lưu ý:** rmpc [chỉ chính thức hỗ trợ Linux](https://rmpc.mierak.dev) — Windows không nằm trong danh sách được test/support chính thức. Phần dưới đây tổng hợp từ tài liệu chính thức của mpd/rmpc, **chưa được test trực tiếp** trên máy Windows thật (khác với phần macOS ở trên đã test live). Nếu gặp lỗi phát sinh không có trong Troubleshooting, tạo issue trên repo này kèm log để cập nhật thêm.
+
+Có 2 cách, chọn 1:
+
+- **Cách 1 — WSL2 (khuyên dùng):** cài mpd/mpc/rmpc y hệt Linux bên trong WSL2, ổn định, đúng theo hỗ trợ chính thức của rmpc. Nhược điểm: cần cấu hình audio bridge từ WSL ra loa Windows.
+- **Cách 2 — Windows gốc (native, best-effort):** dùng bản `mpd.exe` chính chủ từ musicpd.org + build rmpc bằng Cargo. Đơn giản hơn về audio (dùng thẳng WASAPI/WinMM) nhưng không có gì đảm bảo mọi tính năng của rmpc (đặc biệt album art qua terminal image protocol) hoạt động đúng.
+
+## Cách 1 — WSL2 (khuyên dùng)
+
+### Bước 1 — Cài WSL2 + Ubuntu
+
+Mở PowerShell (Run as Administrator):
+
+```powershell
+wsl --install -d Ubuntu
+```
+
+Khởi động lại máy nếu được yêu cầu, sau đó mở Ubuntu từ Start Menu để tạo user Linux.
+
+### Bước 2 — Trong Ubuntu (WSL), cài mpd/mpc
+
+```bash
+sudo apt update
+sudo apt install -y mpd mpc git
+```
+
+### Bước 3 — Clone repo và setup config (giống hệt Linux/macOS)
+
+```bash
+git clone https://github.com/datvt243/mrpc-music-player-client.git ~/.config/mpd
+sed -i "s#/Users/[^/]*#$HOME#g" ~/.config/mpd/mpd.conf
+```
+
+Sửa `music_directory` trong `~/.config/mpd/mpd.conf` trỏ vào thư mục nhạc thật (ví dụ nhạc để trong Windows ở `D:\Music` thì trong WSL sẽ là `/mnt/d/Music`), và đổi `audio_output` sang:
+
+```
+audio_output {
+    type "pulse"
+    name "PulseAudio"
+}
+```
+
+### Bước 4 — Bridge audio từ WSL ra Windows
+
+WSLg (đi kèm sẵn trên Windows 11 / WSL bản mới) đã có sẵn PulseAudio server chuyển tiếp âm thanh ra loa Windows — thường không cần cấu hình thêm. Kiểm tra nhanh:
+
+```bash
+speaker-test -c 2 -t sine -l 1 2>&1 | head -5
+```
+
+Nếu không nghe được gì, xem thêm hướng dẫn chính thức: [WSL audio support](https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps).
+
+### Bước 5 — Chạy mpd, cài rmpc, test
+
+```bash
+mkdir -p ~/.config/rmpc && cp ~/.config/mpd/rmpc/config.toml ~/.config/rmpc/config.toml
+mpd ~/.config/mpd/mpd.conf
+mpc update && mpc stats
+mpc add / && mpc play && sleep 2 && mpc status   # test có tiến trình phát không có lỗi
+mpc stop && mpc clear
+
+curl https://sh.rustup.rs -sSf | sh    # nếu chưa có Rust
+cargo install rmpc
+rmpc
+```
+
+## Cách 2 — Windows gốc (native, best-effort)
+
+### Bước 1 — Tải mpd.exe chính thức
+
+Tải bản binary chính thức (không cần cài đặt, chỉ là 1 file `.exe`):
+
+```
+https://www.musicpd.org/download/win32/0.24.13/mpd.exe
+```
+
+(kiểm tra bản mới nhất tại https://www.musicpd.org/download/win32/). Tạo thư mục `C:\mpd\` và bỏ `mpd.exe` vào đó.
+
+### Bước 2 — Tạo config `C:\mpd\mpd.conf`
+
+Copy nội dung `mpd.conf` trong repo này, sửa đường dẫn sang kiểu Windows và đổi `audio_output` sang `wasapi`:
+
+```ini
+music_directory "C:/Users/ban/Music"
+db_file "C:/mpd/database"
+log_file "C:/mpd/log"
+pid_file "C:/mpd/pid"
+state_file "C:/mpd/state"
+restore_paused "yes"
+playlist_directory "C:/mpd/playlists"
+bind_to_address "127.0.0.1"
+port "6600"
+audio_output {
+    type "wasapi"
+    name "WASAPI"
+}
+```
+
+> Dùng dấu `/` thay vì `\` trong đường dẫn (mpd đọc dạng Unix-style path, kể cả trên Windows) — không dùng ổ đĩa mạng hoặc thư mục cần quyền đặc biệt (OneDrive-protected folder có thể gây lỗi đọc file tương tự lỗi TCC trên macOS).
+
+Nếu `wasapi` không hoạt động (một số bản build cũ không có backend này), đổi sang `winmm`:
+
+```ini
+audio_output {
+    type "winmm"
+    name "WinMM"
+}
+```
+
+### Bước 3 — Chạy thử (foreground) để kiểm tra config đúng
+
+Mở PowerShell tại `C:\mpd\`:
+
+```powershell
+.\mpd.exe --no-daemon --stdout C:\mpd\mpd.conf
+```
+
+Không có lỗi hiện ra tức là ổn, `Ctrl+C` để dừng.
+
+### Bước 4 — Cho mpd tự chạy nền
+
+Cách đơn giản nhất (không cần quyền admin): tạo shortcut chạy `mpd.exe C:\mpd\mpd.conf` và bỏ vào thư mục Startup (`Win + R` → gõ `shell:startup`), hoặc tạo task trong **Task Scheduler** với trigger "At log on".
+
+Muốn chạy như Windows Service thật sự (khởi động cả khi chưa đăng nhập) thì dùng [NSSM](https://nssm.cc/) để wrap `mpd.exe` — `sc create` trực tiếp thường không hoạt động vì mpd.exe không tự implement Service Control protocol của Windows.
+
+### Bước 5 — Cài rmpc qua Cargo
+
+rmpc chưa có bản build sẵn cho Windows, cần build từ source bằng Rust:
+
+```powershell
+# Cài Rust nếu chưa có: https://rustup.rs
+cargo install rmpc
+```
+
+Copy config rmpc trong repo (`rmpc/config.toml`) ra một chỗ trên máy Windows, ví dụ `C:\Users\ban\.rmpc\config.toml`, rồi chạy chỉ định thẳng bằng flag `--config` (an toàn hơn là đoán default path trên Windows):
+
+```powershell
+rmpc --config "C:\Users\ban\.rmpc\config.toml"
+```
+
+### Bước 6 — Test bằng `mpc` (tuỳ chọn)
+
+`mpc` không có bản build sẵn cho Windows trên musicpd.org. Có thể bỏ qua bước test bằng `mpc` và test trực tiếp bằng rmpc, hoặc tự build `mpc` từ [source](https://github.com/MusicPlayerDaemon/mpc) nếu cần CLI riêng.
+
+## Troubleshooting (Windows)
+
+### mpd.exe báo thiếu `libjack64.dll` hoặc DLL khác khi khởi động
+
+Bản mpd.exe chính thức đôi khi link tới JACK audio dù không dùng tới. Cài [JACK Audio Connection Kit](https://jackaudio.org/downloads/) (chỉ cần cài, không cần chạy) để có DLL, hoặc dùng `audio_output type "winmm"` thay vì output khác cần JACK.
+
+### `wasapi`/`winmm` báo không tìm thấy device
+
+Tên device trên Windows có thể bị cắt ngắn/không khớp chính xác. Mở **Volume Mixer** (chuột phải biểu tượng loa ở taskbar → Open Volume Mixer) hoặc **Sound settings** để xem tên chính xác của thiết bị output, dán đúng vào `device "..."` trong `audio_output`. Nếu vẫn lỗi, bỏ hẳn dòng `device` để mpd tự dùng thiết bị mặc định của hệ thống.
+
+### Chạy như Windows Service, log không ghi được / lỗi quyền
+
+Service chạy dưới tài khoản hệ thống (LOCAL SERVICE) không có quyền ghi vào `C:\mpd\` mặc định. Vào **Properties** của thư mục `C:\mpd\` → **Security** → cấp quyền Full Control cho account chạy service (hoặc đơn giản hơn: dùng cách chạy qua Startup/Task Scheduler ở Bước 4 thay vì service thật, chạy dưới chính user account của bạn nên không dính lỗi quyền).
