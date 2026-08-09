@@ -127,7 +127,7 @@
     ),
     search: (
         case_sensitive: false,
-        ignore_diacritics: false,
+        ignore_diacritics: true,
         search_button: false,
         mode: Contains,
         tags: [
