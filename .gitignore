@@ -1,0 +1,11 @@
+# Runtime/generated files — do not commit
+database
+log
+pid
+state
+playlists/
+mpd.conf.bak*
+
+# macOS
+.DS_Store
+.claude/
