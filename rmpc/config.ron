@@ -57,16 +57,16 @@
             "gt":         NextTab,
             "<S-Tab>":    PreviousTab,
             "gT":         PreviousTab,
-            "1":          SwitchToTab("Home"),
-            "2":          SwitchToTab("Directories"),
-            "3":          SwitchToTab("Playlists"),
-            "4":          SwitchToTab("Artists"),
-            "5":          SwitchToTab("Albums"),
-            "6":          SwitchToTab("Album Artists"),
-            "7":          SwitchToTab("Genre"),
-            "8":          SwitchToTab("Queue"),
-            "9":          SwitchToTab("Show"),
-            "0":          SwitchToTab("Search"),
+            "1":          SwitchToTab("Home [1]"),
+            "2":          SwitchToTab("Directories [2]"),
+            "3":          SwitchToTab("Playlists [3]"),
+            "4":          SwitchToTab("Artists [4]"),
+            "5":          SwitchToTab("Albums [5]"),
+            "6":          SwitchToTab("Album Artists [6]"),
+            "7":          SwitchToTab("Genre [7]"),
+            "8":          SwitchToTab("Queue [8]"),
+            "9":          SwitchToTab("Show [9]"),
+            "0":          SwitchToTab("Search [0]"),
             "<C-u>":      Update,
             "<C-U>":      Rescan,
             "R":          AddRandom,
@@ -146,7 +146,7 @@
         album_date_tags: [Date],
     ),
     tabs: [
-        (name: "Home", pane: Split(direction: Horizontal, panes: [
+        (name: "Home [1]", pane: Split(direction: Horizontal, panes: [
                     (size: "70%", borders: "NONE", pane: Split(direction: Vertical, panes: [
                                 (size: "3", borders: "ALL", border_symbols: Rounded , pane: Pane(QueueHeader())),
                                 (size: "100%", borders: "ALL", border_symbols: Rounded ,pane: Pane(Queue)),
@@ -170,31 +170,31 @@
 
                 ])
         ),
-        (name: "Directories", pane: Split(direction: Horizontal,panes: [
+        (name: "Directories [2]", pane: Split(direction: Horizontal,panes: [
                     (size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Directories)),
                 ])
         ),
-        (name: "Playlists", pane: Split(direction: Horizontal, panes: [
+        (name: "Playlists [3]", pane: Split(direction: Horizontal, panes: [
                     (size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Playlists)),
                 ])
         ),
-        (name: "Artists", pane: Split(direction: Horizontal, panes: [
+        (name: "Artists [4]", pane: Split(direction: Horizontal, panes: [
                     (size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Artists)),
                 ])
         ),
-        (name: "Albums", pane: Split(direction: Horizontal, panes: [
+        (name: "Albums [5]", pane: Split(direction: Horizontal, panes: [
                     (size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Albums)),
                 ])
         ),
-        (name: "Album Artists", pane: Split(direction: Horizontal, panes: [
+        (name: "Album Artists [6]", pane: Split(direction: Horizontal, panes: [
                     (size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(AlbumArtists)),
                 ])
         ),
-        (name: "Genre", pane: Split(direction: Horizontal, panes: [
+        (name: "Genre [7]", pane: Split(direction: Horizontal, panes: [
                     (size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Browser(root_tag: "genre", separator: ";"))),
                 ])
         ),
-        (name: "Queue", pane: Split(direction: Vertical, panes: [
+        (name: "Queue [8]", pane: Split(direction: Vertical, panes: [
                     (size: "2", borders: "TOP | RIGHT | LEFT", border_symbols: Rounded , pane: Pane(QueueHeader())),
                     (size: "100%", borders: "ALL", border_symbols: Rounded,
                                     border_title: [(kind: Property(Song(File)), style: (fg: "#4c566a"))],
@@ -205,7 +205,7 @@
 
 
         ),
-        (name: "Show",pane: Split(direction: Vertical, panes: [
+        (name: "Show [9]",pane: Split(direction: Vertical, panes: [
                     (size: "50%", pane: Split(direction: Horizontal, panes: [
                                 (size: "39%", borders: "ALL", border_symbols: Rounded, pane: Pane(Queue)),
                                 (size: "22%", borders: "ALL", border_symbols: Rounded, pane: Pane(AlbumArt)),
@@ -220,7 +220,7 @@
                     (size: "50%", borders: "ALL", border_symbols: Rounded, pane: Pane(Cava)),
                 ])
         ),
-        (name: "Search", pane: Split(direction: Horizontal, panes: [
+        (name: "Search [0]", pane: Split(direction: Horizontal, panes: [
                     (size: "100%", borders: "ALL", border_symbols: Rounded, pane: Pane(Search)),
                 ])
         ),
